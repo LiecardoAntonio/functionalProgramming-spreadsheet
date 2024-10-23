@@ -56,7 +56,51 @@ CONTENT:
   let arr = new Array(1, 2, 3);
   console.log(arr);  // [1, 2, 3]
 
-9. 
+9. Array().fill()
+  > The Array.prototype.fill() method in JavaScript is used to fill all the elements of an array with a specified value. It can also optionally accept a start and end index to fill only a portion of the array.
+  > template:
+  arr.fill(value[, start[, end]])
+  /*
+    value: The value to fill the array with.
+    start (optional): The index at which to start filling (default is 0).
+    end (optional): The index at which to stop filling (default is arr.length).
+  */
+  > ex:
+  let arr = new Array(5).fill(0);
+  console.log(arr);  // [0, 0, 0, 0, 0]
+
+10. Array().fill().map()
+  > Combining Array().fill() with Array.prototype.map() is a common pattern in JavaScript when you want to initialize an array with dynamic values.
+  > ex:
+  let squares = new Array(5).fill().map((_, i) => i * i);
+  console.log(squares);   
+
+11. string.charCodeAt('index')
+  > The .charCodeAt() method in JavaScript is used to return the Unicode (UTF-16) code unit of the character at a specified index in a string. This method can be useful when you want to obtain the numeric representation of a character.
+  > ex:
+  let str = "Hello";
+  let code = str.charCodeAt(0);  // Gets the char code of the first character 'H'
+  console.log(code);  // 72
+
+12. String.fromCharCode()
+  > String.fromCharCode() is a JavaScript method that converts one or more Unicode values (UTF-16 code units) into a string. It is the opposite of the .charCodeAt() method, which retrieves the Unicode code unit of a character from a string.
+  > ex:
+  let char = String.fromCharCode(72);  // Unicode for 'H'
+  console.log(char);  // 'H'
+
+13. (RECALL) element.setAttribute('attribute_name', 'attribute_value')
+  > The element.setAttribute() method in JavaScript is used to add a new attribute or change the value of an existing attribute on a specified HTML element. This method is useful when you need to dynamically manipulate attributes such as id, class, src, href, alt, and others in your DOM elements.
+  > ex:
+  element.setAttribute(name, value);
+  > ex2:
+  let img = document.querySelector("img");
+  img.setAttribute("src", "new-image.jpg");  // Changes the image source
+  > we can also write the attribute_name as the property of the element. for example:
+  element.id = 'id_name';
+
+
+
+
 
 
 
