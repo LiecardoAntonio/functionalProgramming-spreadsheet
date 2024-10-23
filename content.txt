@@ -1,5 +1,63 @@
 FCC Functional Programming - Spreadsheet
 
 CONTENT:
-1. 
+1. global window object
+  > The global window object represents the browser window (or tab).
+
+2. onload property on window object
+  > has an onload property which allows you to define behavior when the window has loaded the entire page, including stylesheets and scripts.
+  > ex:
+  window.onload = () => {
+    const container = document.getElementById('container');
+  }
+
+3. (CONCEPT) nested function
+  > When a function itself needs to reuse logic, you can declare a nested function to handle that logic.
+  > ex:
+  const outer = () => {
+    const inner = () => {
+
+    };
+  };
+
+4. (RECALL) document.createElement('element_tag')
+  > Remember that the document object has a .createElement() method which allows you to dynamically create new HTML elements.
+  > ex:
+  const label = document.createElement('div');
+
+5. (RECALL) element.className = 'class_name'
+  > The className property of the Element interface gets and sets the value of the class attribute of the specified element.
+  > This property gets or sets the entire class attribute of an element as a single string.
+  > If you want to add a new class to an element without removing the existing ones, you would need to manually concatenate the current classes.
+  ex: 
+  element.className += " another-class";  // Adds a new class while keeping the existing ones
+
+6. (RECALL) element.classList.add('class_name');
+  > This method is part of the classList API and allows you to add one or more classes to an element without affecting existing classes.
+  > ex:
+  element.classList.add("class1", "class2");
+
+7. (RECALL) element.appendChild('other_element');
+  > The element.appendChild() method is used to add a node (typically an element) as the last child of a specified parent element. It is part of the DOM (Document Object Model) API in JavaScript.
+  > ex:
+  const parentDiv = document.getElementById("parent-div");
+  const newParagraph = document.createElement("p");
+  newParagraph.textContent = "This is a new paragraph!";
+  parentDiv.appendChild(newParagraph);
+
+8. Array() constructor
+  > The Array() constructor in JavaScript is used to create an array object. It can be invoked in several ways, depending on the number and types of arguments passed to it.
+  > Use the Array() constructor create an empty array.
+  > ex:
+  let arr = new Array(5); 
+  console.log(arr);  // [ <5 empty items> ]
+  console.log(arr.length);  // 5
+  > ex2: 
+  let arr = new Array(1, 2, 3);
+  console.log(arr);  // [1, 2, 3]
+
+9. 
+
+
+
 
