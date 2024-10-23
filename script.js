@@ -29,3 +29,18 @@ window.onload = () => {
     
   })
 }
+
+//-----------------creating the excel built-in function---------
+const sum = (nums) => nums.reduce((el, acc) => acc+el, 0);
+
+const isEven = (num) => num%2===0;
+
+const average = (nums) => sum(nums)/nums.length; //using the created sum function before
+
+const median = (nums) => {
+  const sorted = nums.slice().sort((a, b) => a-b);
+  const length = sorted.length;
+  const middle = length/2-1;
+  return isEven(length) ? average([sorted[middle], sorted[middle+1]]) : sorted[Math.ceil(middle)]; //Using ternary syntax, check if length is even using your isEven function. If it is, return the average of the number at the middle index and the number after that. If it's odd, return the number at the middle index – you'll need to round the middle value up.
+  //NOTE: this part: [sorted[middle], sorted[middle+1]], is equal to an array of [value1, value2], so it is 1 array with two element.
+}

@@ -98,6 +98,29 @@ CONTENT:
   > we can also write the attribute_name as the property of the element. for example:
   element.id = 'id_name';
 
+14. (RECALL) array.reduce((element, accumulator) => {el+acc}, 0);
+  > The Array.prototype.reduce() method in JavaScript is used to apply a function to each element of an array (from left to right) in order to reduce the array to a single output value. It accumulates the result based on the logic you provide in the callback function.
+  > ex:
+  const sum = (nums) => nums.reduce((el, acc) => acc+el, 0); //sum every element to the accumulator and return the result, initial value is 0
+
+15. (RECALL) array.sort((a, b) => a-b);
+  > sort from smallest to highest
+
+16. (RECALL) array.slice()
+  > array.slice() creates a shallow copy of the nums array. This means that it returns a new array that contains the same elements as nums. Importantly, this operation does not modify the original nums array. This is useful when you want to sort an array without altering the original data.
+  > ex:
+  let original = ['a', 'b', 'c'];
+  let copy = original.slice();  // Creates a new array
+  console.log(copy);  // ['a', 'b', 'c']
+  console.log(original === copy);  // false (different references)
+  > NOTE: this kinda works the same as the spread operator
+  code:
+  let original = ['a', 'b', 'c'];
+  let copy = ...original;  // Creates a new array
+
+17. 
+
+
 
 
 
