@@ -97,17 +97,21 @@ const evalFormula = (x, cells) => {
       };
   };
   */ 
- //Your addCharacters function ultimately returns a range of characters. You want it to return an array of cell ids. Chain the .map() method to your charRange() call
- const addCharacters = character1 => character2 => num => charRange(character1, character2).map(elemValue(num)); //Because elemValue returns a function, your addCharacters function ultimately returns an array of function references. You want the .map() method to run the inner function of your elemValue function, which means you need to call elemValue instead of reference it. Pass num as the argument to your elemValue function.
+  //Your addCharacters function ultimately returns a range of characters. You want it to return an array of cell ids. Chain the .map() method to your charRange() call
+  const addCharacters = character1 => character2 => num => charRange(character1, character2).map(elemValue(num)); //Because elemValue returns a function, your addCharacters function ultimately returns an array of function references. You want the .map() method to run the inner function of your elemValue function, which means you need to call elemValue instead of reference it. Pass num as the argument to your elemValue function.
 
- //The second argument to the .replace() method does not have to be a string. You can instead pass a callback function to run more complex logic on the matched string. The callback function should have a parameter for each capture group in the regular expression. In your case, rangeRegex has four capture groups: the first letter, the first numbers, the second letter, and the second numbers.
- //  const rangeExpanded = x.replace(rangeRegex, (match, char1, num1, char2, num2) => rangeFromString(num1, num2).map(addCharacters(char1)(char2))); //Your addCharacters(char1) is also returning a function, which returns another function. You need to make another function call to access that innermost function reference for the .map() callback.
+  //The second argument to the .replace() method does not have to be a string. You can instead pass a callback function to run more complex logic on the matched string. The callback function should have a parameter for each capture group in the regular expression. In your case, rangeRegex has four capture groups: the first letter, the first numbers, the second letter, and the second numbers.
+  //  const rangeExpanded = x.replace(rangeRegex, (match, char1, num1, char2, num2) => rangeFromString(num1, num2).map(addCharacters(char1)(char2))); //Your addCharacters(char1) is also returning a function, which returns another function. You need to make another function call to access that innermost function reference for the .map() callback.
 
- //Now that your .map() function is receiving the returned num => charRange(...).map(...) function reference from the curried addCharacters calls, it will properly iterate over the elements and pass each element as n to that function.
+  //Now that your .map() function is receiving the returned num => charRange(...).map(...) function reference from the curried addCharacters calls, it will properly iterate over the elements and pass each element as n to that function.
   const rangeExpanded = x.replace(rangeRegex, (_match, char1, num1, char2, num2) => rangeFromString(num1, num2).map(addCharacters(char1)(char2))); //You'll notice that you are not using your match parameter. In JavaScript, it is common convention to prefix an unused parameter with an underscore _.
 
   const cellRegex = /[A-J][1-9][0-9]?/gi;
   const cellExpanded = rangeExpanded.replace(cellRegex, match => idToText(match.toUpperCase()));
+
+  //Now you can start applying your function parser to your evalFormula logic. Declare a functionExpanded variable, and assign it the result of calling applyFunction with your cellExpanded string.
+  const functionExpanded = applyFunction(cellExpanded);
+  return functionExpanded === x ? functionExpanded : evalFormula(functionExpanded, cells); //Like you did with your highPrecedence() function, your evalFormula() function needs to ensure it has evaluated and replaced everything.
 };
 
 //function to make an update to the input element
@@ -115,10 +119,11 @@ const update = event => {
   const element = event.target;
   console.log(element);
   const value = element.value.replace(/\s/g, ''); //replace all space in the input element
+  //check if a function is called or not
   if (!value.includes(element.id) && value.charAt(0) === '=') {
     //check if the value does not include the id of the element. Also spreadsheet software typically uses = at the beginning of a cell to indicate a calculation should be used, and spreadsheet functions should be evaluated. You should use the && operator to add a second condition to your if statement that also checks if the first character of value is "=". You may use [0], .startsWith(), or .charAt(0).
 
-
+    element.value = evalFormula(value.slice(1), Array.from(document.getElementById("container").children)); //The first argument for your evalFormula call needs to be the contents of the cell (which you stored in value). However, the contents start with an = character to trigger the function, so you need to pass the substring of value starting at index 1. > You can quickly get all cells from your page by getting the #container element by its id and accessing the children property of the result. Pass that to your evalFormula() call as the second parameter. > Unfortunately, that children property is returning a collection of elements, which is array-like but not an array. Wrap your second argument in Array.from() to convert it to an array.
   }
 }
 
@@ -139,7 +144,38 @@ const median = (nums) => {
 
 //object literal that store every available function in the spreadsheet
 const spreadsheetFunctions = {
+  '': args => args, //Finally, to handle potential edge cases, add an empty string property (you will need to use quotes) which is a function that takes a single argument and returns that argument.
   sum,
   average,
-  median
+  median,
+  someeven: nums => nums.some(isEven),
+  everyeven: nums => nums.every(isEven),
+
+  even: nums => nums.filter(isEven),
+  firsttwo: nums => nums.splice(0, 2),
+  lasttwo: nums => nums.splice(nums.length-2, 2),
+  has2: nums => nums.includes(2),
+  increment: nums => nums.map(el => el+1),
+  random: ([x, y]) => Math.floor(Math.random() * y + x),
+  //below also works
+  // random: nums => {
+  //   const [first, second] = nums.slice(0, 2); // Get the first two numbers from the array
+  //   return Math.floor(Math.random() * (first + second - first)) + first;
+  // }
+  range: nums => range(nums[0], nums[1]), //create an array in range
+  nodupes: nums => [...new Set(nums)] //no dupe in the array
 }
+
+//Now you can start applying your function parsing logic to a string. Declare a function called applyFunction, which takes a str parameter.
+const applyFunction = (str) => {
+  const noHigh = highPrecedence(str); //First you need to handle the higher precedence operators. 
+  const infix = /([\d.]+)([+-])([\d.]+)/; //Now that you've parsed and evaluated the multiplication and division operators, you need to do the same with the addition and subtraction operators. assign a regular expression that matches a number (including decimal numbers) followed by a + or - operator followed by another number.
+  const str2 = infixEval(noHigh, infix);
+  const functionCall = /([a-z0-9]*)\(([0-9., ]*)\)(?!.*\()/i; //This expression will look for function calls like sum(1, 4).
+
+  const toNumberList = args => args.split(',').map(parseFloat);
+
+  const apply = (fn, args) => spreadsheetFunctions[fn.toLowerCase()](toNumberList(args)); //The fn parameter will be passed the name of a function, such as "SUM". Update apply to implicitly return the function from your spreadsheetFunctions object using the fn variable as the key for the object access. Remember that fn might not contain a lowercase string, so you'll need to convert it to a lowercase string. Your apply function is returning the spreadsheet function, but not actually applying it. Update apply to call the function. Pass in the result of calling toNumberList with args as an argument.
+
+  return str2.replace(functionCall, (match, fn, args) => spreadsheetFunctions.hasOwnProperty(fn.toLowerCase()) ? apply(fn, args) : match);
+};
