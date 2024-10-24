@@ -25,9 +25,28 @@ window.onload = () => {
       input.id = letter + number; //identifier for each input element
       input.ariaLabel = input.id;
       container.appendChild(input); //append the created input element to the container
+
+      input.onchange = update; //In your window.onload function, you need to tell your input elements to call the update function when the value changes. You can do this by directly setting the onchange property.
     })
     
   })
+}
+
+//In order to run your spreadsheet functions, you need to be able to parse and evaluate the input string. This is a great time to use another function.
+const evalFormula = (x, cells) => {
+  const idToText = id => cells.find((cell) => cell.id===id)
+};
+
+//function to make an update to the input element
+const update = event => {
+  const element = event.target;
+  console.log(element);
+  const value = element.value.replace(/\s/g, ''); //replace all space in the input element
+  if (!value.includes(element.id) && value.charAt(0) === '=') {
+    //check if the value does not include the id of the element. Also spreadsheet software typically uses = at the beginning of a cell to indicate a calculation should be used, and spreadsheet functions should be evaluated. You should use the && operator to add a second condition to your if statement that also checks if the first character of value is "=". You may use [0], .startsWith(), or .charAt(0).
+
+
+  }
 }
 
 //-----------------creating the excel built-in function---------
@@ -43,4 +62,11 @@ const median = (nums) => {
   const middle = length/2-1;
   return isEven(length) ? average([sorted[middle], sorted[middle+1]]) : sorted[Math.ceil(middle)]; //Using ternary syntax, check if length is even using your isEven function. If it is, return the average of the number at the middle index and the number after that. If it's odd, return the number at the middle index – you'll need to round the middle value up.
   //NOTE: this part: [sorted[middle], sorted[middle+1]], is equal to an array of [value1, value2], so it is 1 array with two element.
+}
+
+//object literal that store every available function in the spreadsheet
+const spreadsheetFunctions = {
+  sum,
+  average,
+  median
 }

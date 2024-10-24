@@ -118,7 +118,39 @@ CONTENT:
   let original = ['a', 'b', 'c'];
   let copy = ...original;  // Creates a new array
 
-17. 
+17. (CONCEPT) Declaring object literal
+  >  You can use shorthand property names when declaring an object literal. When using the shorthand property name syntax, the name of the variable becomes the property key and its value the property value.
+  > ex:
+  const userId = 1;
+  const firstName = "John";
+  const loggedIn = true;
+
+  const user = {
+    userId,
+    firstName,
+    loggedIn,
+  };
+
+  console.log(user); // { userId: 1, firstName: 'John', loggedIn: true }
+
+18. string.startsWith('char')
+  > check if a string startsWith a specified char, return true if yes
+
+19. string.charAt(index)
+  > return the char at specified index of the string.
+
+20. (RECALL) array.find(() => {})
+  > The .find(() => {}) method in JavaScript is typically used on arrays to find the first element that matches a specific condition provided in a callback function. It returns the value of the first matching element, or undefined if no match is found.
+  > ex:
+  const array = [1, 2, 3, 4, 5];
+
+  // Find the first element greater than 3
+  const result = array.find((element) => {
+      return element > 3;
+  });
+
+  console.log(result); // Output: 4
+
 
 
 
