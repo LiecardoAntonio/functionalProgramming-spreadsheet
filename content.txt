@@ -214,6 +214,36 @@ CONTENT:
   const newArray = array.map(myFunc);
   //The .map() method here will call the myFunc function, passing the same arguments that a .map() callback takes. The first argument is the value of the array at the current iteration, so newArray would be [value: 1, value: 2, value: 3].
 
+25. (CONCEPT) Immediately Invoked Function Expression (IIFE)
+  > JavaScript function that is executed right after it is defined. This is useful for creating a new scope, avoiding variable hoisting issues, and executing code without polluting the global namespace.
+  > ex:
+  var counter = (function() {
+      let count = 0; // private variable
+
+      return {
+          increment: function() {
+              count++;
+              return count;
+          },
+          decrement: function() {
+              count--;
+              return count;
+          },
+          getCount: function() {
+              return count;
+          }
+      };
+  })();
+
+  console.log(counter.increment()); // Output: 1
+  console.log(counter.increment()); // Output: 2
+  console.log(counter.getCount());  // Output: 2
+
+26. (CONCEPT) unused parameter
+  > In JavaScript, it is common convention to prefix an unused parameter with an underscore _. 
+  > ex:
+  const rangeExpanded = x.replace(rangeRegex, (_match, char1, num1, char2, num2) => rangeFromString(num1, num2).map(addCharacters(char1)(char2)));
+
 
 
 
