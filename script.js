@@ -34,7 +34,53 @@ window.onload = () => {
 
 //In order to run your spreadsheet functions, you need to be able to parse and evaluate the input string. This is a great time to use another function.
 const evalFormula = (x, cells) => {
-  const idToText = id => cells.find((cell) => cell.id===id)
+  const idToText = id => cells.find(cell => cell.id === id).value; //Your idToText function currently returns an input element.
+  console.log(`eval formula = ${idToText}`);
+
+  /*
+  
+  1. You need to be able to match cell ranges in a formula. Cell ranges can look like A1:B12 or A3:A25. You can use a regular expression to match these patterns. Start by declaring a rangeRegex variable and assign it a regular expression that matches A through J (the range of columns in your spreadsheet). Use a capture group with a character class to achieve this. 
+  
+  2. After matching a cell letter successfully, your rangeRegex needs to match the cell number. Cell numbers in your sheet range from 1 to 99. Add a capture group after your letter capture group. Your new capture group should match one or two digits – the first digit should be 1 through 9, and the second digit should be 0 through 9. The second digit should be optional.
+
+  3. Ranges are separated by a colon. After your two capture groups, your rangeRegex should look for a colon.
+
+  4. After your rangeRegex finds the :, it needs to look for the same letter and number pattern as it did before.
+
+  5. Finally, make your rangeRegex global and case-insensitive.
+
+  */
+  // const rangeRegex = /([A-J])([1-9][0-9]?)/;
+  const rangeRegex = /([A-J])([1-9][0-9]?):([A-J])([1-9][0-9]?)/gi;
+
+  //Declare a rangeFromString arrow function that takes two parameters, num1 and num2. The function should implicitly return the result of calling range with num1 and num2 as arguments.
+  const rangeFromString = (num1, num2) => range(parseInt(num1), parseInt(num2));
+
+
+  //using currying concept
+  // const elemValue = num => {
+  //   const inner = character => {
+  //     return idToText(character + num);
+  //   }
+  //   return inner;
+  // }
+  //update the above function to arrow function:
+  const elemValue = num => character => idToText(character+num);
+
+  //currying in arrow function
+  // const addCharacters = character1 => character2 => num => charRange(character1, character2);
+  //the function above equals to:
+  /*
+  const addCharacters = function(character1) {
+      return function(character2) {
+          return function(num) {
+              return charRange(character1, character2);
+          };
+      };
+  };
+  */ 
+ //Your addCharacters function ultimately returns a range of characters. You want it to return an array of cell ids. Chain the .map() method to your charRange() call
+ const addCharacters = character1 => character2 => num => charRange(character1, character2).map(elemValue(num)); //Because elemValue returns a function, your addCharacters function ultimately returns an array of function references. You want the .map() method to run the inner function of your elemValue function, which means you need to call elemValue instead of reference it. Pass num as the argument to your elemValue function.
 };
 
 //function to make an update to the input element

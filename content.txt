@@ -151,6 +151,72 @@ CONTENT:
 
   console.log(result); // Output: 4
 
+21. (CONCEPT) currying
+  > The concept of returning a function within a function is called currying. This approach allows you to create a variable that holds a function to be called later, but with a reference to the parameters of the outer function call.
+  > ex:
+  const innerOne = elemValue(1);
+  const final = innerOne("A");
+  // innerOne would be your inner function, with num set to 1, and final would have the value of the cell with the id of "A1". This is possible because functions have access to all variables declared at their creation. This is called closure.
+  > ex:
+  function add(a) {
+      return function(b) {
+          return a + b;
+      };
+  }
+
+  const addTwo = add(2); // Returns a function that adds 2 to its argument
+  console.log(addTwo(3)); // Output: 5
+  > explanation: The add function is now broken into two functions. The first function takes a and returns a second function that takes b. The second function performs the actual addition.
+  > currying in arrow function. ex:
+  const multiply = a => b => c => a * b * c;
+  console.log(multiply(2)(3)(4)); // Output: 24
+
+22. (DEFINITION) closure
+  > A closure in JavaScript is a function that "remembers" its lexical scope, even when the function is executed outside that scope. In simpler terms, a closure allows a function to access variables from its outer (enclosing) function's scope, even after the outer function has finished executing.
+  > basic ex:
+  function outer() {
+      const outerVar = 'I am from the outer function';
+
+      function inner() {
+          console.log(outerVar); // The inner function can access outerVar
+      }
+
+      return inner;
+  }
+
+  const closureFunc = outer(); // outer() returns the inner function
+  closureFunc(); // Output: "I am from the outer function"
+
+23. (CONCEPT) currying arrow function
+  > Because you are using arrow syntax, you can implicitly return a function using currying concept.
+  > ex:
+  const curry = soup => veggies => {}; //curry is a function which takes a soup parameter and returns a function which takes a veggies parameter. Using this syntax, update your addCharacters function to return an empty function which takes a character2 parameter.
+
+24. (CONCEPT) function reference  
+  > In JavaScript, a function reference refers to the ability to refer to a function by its name without executing it. This allows you to pass the function as an argument, return it from another function, or store it in a variable.
+  > ex:
+  function sayHello() {
+      console.log("Hello!");
+  }
+  const sayGoodbye = function() {
+      console.log("Goodbye!");
+  };
+  function executeFunction(fn) {
+      fn(); // Calls the passed function
+  }
+
+  executeFunction(sayHello); // Output: "Hello!"
+  executeFunction(sayGoodbye); // Output: "Goodbye!"
+  > You can pass a function reference as a callback parameter. A function reference is a function name without the parentheses. 
+  > ex:
+  const myFunc = (val) => `value: ${val}`;
+  const array = [1, 2, 3];
+  const newArray = array.map(myFunc);
+  //The .map() method here will call the myFunc function, passing the same arguments that a .map() callback takes. The first argument is the value of the array at the current iteration, so newArray would be [value: 1, value: 2, value: 3].
+
+
+
+
 
 
 
